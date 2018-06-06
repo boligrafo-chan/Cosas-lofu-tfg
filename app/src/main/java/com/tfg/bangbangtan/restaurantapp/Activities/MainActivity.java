@@ -17,6 +17,8 @@ import com.tfg.bangbangtan.restaurantapp.Utilities.DishTypeAdapter;
 
 import java.util.List;
 
+import butterknife.ButterKnife;
+
 public class MainActivity extends AppCompatActivity {
 
 	private ListView dishTlistview;
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 
 		APIManager.getInstance().getDishTypes(new APIManager.ResponseCallback<List<DishType>>() {
 			@Override

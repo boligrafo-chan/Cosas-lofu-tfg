@@ -1,8 +1,6 @@
 package com.tfg.bangbangtan.restaurantapp.Utilities;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.R;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 
 public class DishTypeAdapter extends BaseAdapter {
@@ -24,7 +20,6 @@ public class DishTypeAdapter extends BaseAdapter {
 	private List<DishType> dishTypes;
 
 	public DishTypeAdapter(Context context, int layout, List<DishType> dishTypes) {
-
 		this.context = context;
 		this.layout = layout;
 		this.dishTypes = dishTypes;
@@ -64,16 +59,14 @@ public class DishTypeAdapter extends BaseAdapter {
 
 		String name = dishTypes.get(position).getName();
 		String imageUrl = dishTypes.get(position).getImage();
-		new DownloadImageTask(holder.dishTypeIm).execute(imageUrl);
+		Picasso.get().load(imageUrl).into(holder.dishTypeIm);
 		holder.dishTypeText.setText(name);
-
 
 		return convertView;
 	}
 
-	static class ViewHolder {
+	private static class ViewHolder {
 		private TextView dishTypeText;
 		private ImageView dishTypeIm;
-
 	}
 }

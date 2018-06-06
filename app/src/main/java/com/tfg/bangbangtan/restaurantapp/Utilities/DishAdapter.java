@@ -10,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.tfg.bangbangtan.restaurantapp.Models.Dish;
 import com.tfg.bangbangtan.restaurantapp.R;
 
@@ -68,18 +69,8 @@ public class DishAdapter extends BaseAdapter {
 
 		String name= dishes.get(position).getName();
 		String image= dishes.get(position).getImage();
-		try {
-			URL imageURL = new URL(image);
-			Bitmap bmp = BitmapFactory.decodeStream(imageURL.openConnection().getInputStream());
-			holder.dishIm.setImageBitmap(bmp);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			holder.dishIm.setImageResource(R.drawable.fingers);
-		}
+		Picasso.get().load(image).into(holder.dishIm);
 		holder.dishText.setText(name);
-
-
 		return convertView;
 	}
 	static class ViewHolder {

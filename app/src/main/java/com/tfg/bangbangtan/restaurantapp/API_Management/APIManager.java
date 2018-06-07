@@ -37,8 +37,8 @@ public class APIManager {
 		return instance;
 	}
 
-	public void getDishSubtypes(int type_id, final ResponseCallback<List<DishSubtype>> responseCallback) {
-		Call<List<DishSubtype>> subtypesCall = restaurantService.getsubTypesFromType(type_id);
+	public void getDishSubtypes(int dishTypeId, final ResponseCallback<List<DishSubtype>> responseCallback) {
+		Call<List<DishSubtype>> subtypesCall = restaurantService.getsubTypesFromType(dishTypeId);
 		subtypesCall.enqueue(new Callback<List<DishSubtype>>() {
 			@Override
 			public void onResponse(Call<List<DishSubtype>> call, Response<List<DishSubtype>> response) {
@@ -68,16 +68,9 @@ public class APIManager {
 		});
 	}
 
-	public List<ExtraIngredient> getRelatedExtras(int type_id, Context context) {
+	public List<ExtraIngredient> getRelatedExtras(int dishTypeId) {
 		List<ExtraIngredient> result = null;
-		Call<List<ExtraIngredient>> typesCall = restaurantService.getRelatedExtras(type_id);
-		try {
-			result = typesCall.execute().body();
-		} catch (IOException e) {
-			//TODO Mostrar TOAST??
-			Toast.makeText(context, "Error al traer ingredientes extra coincidentes", Toast.LENGTH_LONG).show();
-			e.printStackTrace();
-		}
+		Call<List<ExtraIngredient>> typesCall = restaurantService.getRelatedExtras(dishTypeId);
 		return result;
 	}
 

@@ -12,12 +12,12 @@ import retrofit2.http.Path;
 
 public interface RestaurantService {
 
-	@GET("dishType/{dishType}/extraIngredients")
-	Call<List<ExtraIngredient>> getRelatedExtras(@Path("dishType") int type_id);
+	@GET("dishTypes/{dishType}/extraIngredients")
+	Call<List<ExtraIngredient>> getRelatedExtras(@Path("dishType") int dishTypeId);
 
-	@GET("dishType/{main_item_id}/dishSubtypes")
-	Call<List<DishSubtype>> getsubTypesFromType(@Path("main_item_id") int type_id);
+	@GET("dishTypes/{main_item_id}/dishSubtypes")
+	Call<List<DishSubtype>> getsubTypesFromType(@Path("main_item_id") int dishTypeId);
 
-	@GET("dishType")
+	@GET("dishTypes")
 	Call<List<DishType>> getAllDishTypes();
 }

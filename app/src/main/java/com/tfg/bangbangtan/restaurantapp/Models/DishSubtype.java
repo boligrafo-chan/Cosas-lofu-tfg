@@ -1,16 +1,42 @@
 package com.tfg.bangbangtan.restaurantapp.Models;
 
-public class DishSubtype extends DishType {
-	private int dish_type_id;
+import com.google.gson.annotations.SerializedName;
 
-	public DishSubtype(String image, String name, int priority, int id, int dish_type_id) {
-		super(image, name, priority, id);
-		this.dish_type_id=dish_type_id;
+public class DishSubtype {
+	private int id;
+	private String image;
+	private String name;
+	@SerializedName("dish_type_id")
+	private int dishTypeId;
+
+	public DishSubtype(String image, String name, int id, int dishTypeId) {
+		this.id = id;
+		this.image = image;
+		this.name = name;
+		this.dishTypeId = dishTypeId;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	public int getDishTypeId() {
-		return dish_type_id;
+		return dishTypeId;
 	}
-
-
 }

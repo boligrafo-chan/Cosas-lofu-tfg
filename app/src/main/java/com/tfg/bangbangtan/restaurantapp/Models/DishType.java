@@ -2,21 +2,17 @@ package com.tfg.bangbangtan.restaurantapp.Models;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class DishType {
 	private int id;
 	private String image;
 	private String name;
-	private int priority;
 
-	@SerializedName("dish_subtypes")
-	private List<DishSubtype> dishSubtypes;
+	@SerializedName("has_subtypes")
+	private boolean hasSubtypes;
 
-	public DishType(String image , String name , int priority, int id) {
+	public DishType(String image, String name, int id) {
 		this.image=image;
 		this.name=name;
-		this.priority = priority;
 		this.id=id;
 	}
 
@@ -36,25 +32,16 @@ public class DishType {
 		this.name = name;
 	}
 
-	public int getPriority() {
-		return priority;
-	}
-
-	public void setPriority(int priority) {
-		this.priority = priority;
-	}
-
 	public int getId() {
 		return id;
 	}
 
-	public List<DishSubtype> getDishSubtypes() {
-		return dishSubtypes;
+	public boolean getHasSubtypes() {
+		return hasSubtypes;
 	}
 
-	public void setDishSubtypes(List<DishSubtype> dishSubtypes) {
-		this.dishSubtypes = dishSubtypes;
+	public void setHasSubtypes(boolean hasSubtypes) {
+		this.hasSubtypes = hasSubtypes;
 	}
-
 	/*No hay set id , seguridad*/
 }

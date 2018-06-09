@@ -2,8 +2,6 @@ package com.tfg.bangbangtan.restaurantapp.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -14,7 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.tfg.bangbangtan.restaurantapp.Models.DishSubtype;
 import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.R;
 import com.tfg.bangbangtan.restaurantapp.Utilities.AppString;
@@ -33,7 +30,7 @@ public class DishTypeActivity extends AppCompatActivity {
 	@BindView(R.id.mainDishTypeList)
 	ListView dishTypesListView;
 
-	DishTypeViewModel mDishTypeViewModel;
+	DishTypeViewModel dishTypeViewModel;
 	DishTypeAdapter dishTypeAdapter;
 	List<DishType> dishTypes;
 
@@ -43,7 +40,7 @@ public class DishTypeActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_main);
 		ButterKnife.bind(this);
 		dishTypes = new ArrayList<>();
-		mDishTypeViewModel = ViewModelProviders.of(this).get(DishTypeViewModel.class);
+		dishTypeViewModel = ViewModelProviders.of(this).get(DishTypeViewModel.class);
 		dishTypeAdapter = new DishTypeAdapter(DishTypeActivity.this, R.layout.list_item_dishtype, dishTypes);
 		dishTypesListView.setAdapter(dishTypeAdapter);
 		loadDishTypes();
@@ -51,8 +48,8 @@ public class DishTypeActivity extends AppCompatActivity {
 
 	@OnItemClick(R.id.mainDishTypeList)
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		List<DishSubtype> dishSubtypes = dishTypes.get(position).getDishSubtypes();
-		if (!dishSubtypes.isEmpty()) {
+		boolean hasSubtypes = dishTypes.get(position).getHasSubtypes();
+		if (hasSubtypes) {
 			//IR A ACTIVITY CON SUBTIPOS
 			Intent showSubtypes;
 			showSubtypes = new Intent(DishTypeActivity.this, DishSubtypeActivity.class);
@@ -66,7 +63,7 @@ public class DishTypeActivity extends AppCompatActivity {
 	}
 
 	private void loadDishTypes() {
-		final LiveData<List<DishType>> dishTypesLiveData = mDishTypeViewModel.getDishTypesList();
+		final LiveData<List<DishType>> dishTypesLiveData = dishTypeViewModel.getDishTypesList();
 		Observer<List<DishType>> dishTypesResponseObserver = new ObserverDishTypes(dishTypesLiveData);
 		dishTypesLiveData.removeObservers(this);
 		dishTypesLiveData.observe(DishTypeActivity.this, dishTypesResponseObserver);

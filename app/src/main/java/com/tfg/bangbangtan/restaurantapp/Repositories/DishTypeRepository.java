@@ -10,12 +10,12 @@ import java.util.List;
 public class DishTypeRepository {
 
 	public MutableLiveData<List<DishType>> getDishTypesList() {
-		final MutableLiveData<List<DishType>> getDishTypesResponseMutableLiveData = new MutableLiveData<>();
+		final MutableLiveData<List<DishType>> responseLiveData = new MutableLiveData<>();
 
 		APIManager.getInstance().getDishTypes(new APIManager.ResponseCallback<List<DishType>>() {
 			@Override
 			public void OnResponseSuccess(List<DishType> responseObject) {
-				getDishTypesResponseMutableLiveData.setValue(responseObject);
+				responseLiveData.setValue(responseObject);
 			}
 
 			@Override
@@ -23,6 +23,6 @@ public class DishTypeRepository {
 
 			}
 		});
-		return getDishTypesResponseMutableLiveData;
+		return responseLiveData;
 	}
 }

@@ -13,15 +13,14 @@ import java.util.List;
 
 public class DishTypeViewModel extends AndroidViewModel {
 
-	private DishTypeRepository mDishTypeRepository;
-
+	private DishTypeRepository dishTypeRepository;
 
 	public DishTypeViewModel(@NonNull Application application) {
 		super(application);
-		mDishTypeRepository = new DishTypeRepository();
+		dishTypeRepository = new DishTypeRepository();
 	}
 
 	public LiveData<List<DishType>> getDishTypesList() {
-		return mDishTypeRepository.getDishTypesList();
+		return dishTypeRepository.getDishTypesList();
 	}
 }

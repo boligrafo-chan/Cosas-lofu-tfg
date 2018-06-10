@@ -32,5 +32,6 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".Activities.DishSubtypeActivity" />
+		<activity android:name=".Activities.DishesActivity" />
 	</application>
 </manifest>

@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -41,19 +39,19 @@ public class DishTypeActivity extends AppCompatActivity {
 		ButterKnife.bind(this);
 		dishTypes = new ArrayList<>();
 		dishTypeViewModel = ViewModelProviders.of(this).get(DishTypeViewModel.class);
-		dishTypeAdapter = new DishTypeAdapter(DishTypeActivity.this, R.layout.list_item_dishtype, dishTypes);
+		dishTypeAdapter = new DishTypeAdapter(DishTypeActivity.this, R.layout.list_menu_item, dishTypes);
 		dishTypesListView.setAdapter(dishTypeAdapter);
 		loadDishTypes();
 	}
 
 	@OnItemClick(R.id.mainDishTypeList)
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+	public void onItemClick(int position) {
 		boolean hasSubtypes = dishTypes.get(position).getHasSubtypes();
 		if (hasSubtypes) {
 			//IR A ACTIVITY CON SUBTIPOS
 			Intent showSubtypes;
 			showSubtypes = new Intent(DishTypeActivity.this, DishSubtypeActivity.class);
-			showSubtypes.putExtra(AppString.CLICKED_HAS_SUBTY, true);
+			showSubtypes.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
 			showSubtypes.putExtra(AppString.CLICKED_ITEM_ID, dishTypes.get(position).getId());
 			startActivity(showSubtypes);
 		}else {

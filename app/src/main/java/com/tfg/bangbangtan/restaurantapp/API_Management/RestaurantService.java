@@ -1,5 +1,6 @@
 package com.tfg.bangbangtan.restaurantapp.API_Management;
 
+import com.tfg.bangbangtan.restaurantapp.Models.Dish;
 import com.tfg.bangbangtan.restaurantapp.Models.DishSubtype;
 import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.Models.ExtraIngredient;
@@ -20,4 +21,10 @@ public interface RestaurantService {
 
 	@GET("dishTypes")
 	Call<List<DishType>> getAllDishTypes();
+
+	@GET("dishTypes/{dishTypeId}/dishes")
+	Call<List<Dish>> getDishes(@Path("dishTypeId") int dishTypeId);
+
+	@GET("dishTypes/{dishTypeId}/dishSubtypes/{dishSubtypeId}/dishes")
+	Call<List<Dish>> getDishes(@Path("dishTypeId") int dishTypeId, @Path("dishSubtypeId") int dishSubtypeId);
 }

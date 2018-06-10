@@ -3,6 +3,7 @@ package com.tfg.bangbangtan.restaurantapp.API_Management;
 import android.content.Context;
 import android.widget.Toast;
 
+import com.tfg.bangbangtan.restaurantapp.Models.Dish;
 import com.tfg.bangbangtan.restaurantapp.Models.DishSubtype;
 import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.Models.ExtraIngredient;
@@ -72,6 +73,27 @@ public class APIManager {
 		List<ExtraIngredient> result = null;
 		Call<List<ExtraIngredient>> typesCall = restaurantService.getRelatedExtras(dishTypeId);
 		return result;
+	}
+
+	public void getDishes(int dishTypeId, int dishSubtypeId, final ResponseCallback<List<Dish>> responseCallback) {
+		Call<List<Dish>> dishesCall;
+		if(dishSubtypeId == 0){
+			dishesCall = restaurantService.getDishes(dishTypeId);
+		}else{
+			dishesCall = restaurantService.getDishes(dishTypeId, dishSubtypeId);
+		}
+
+		dishesCall.enqueue(new Callback<List<Dish>>() {
+			@Override
+			public void onResponse(Call<List<Dish>> call, Response<List<Dish>> response) {
+				responseCallback.OnResponseSuccess(response.body());
+			}
+
+			@Override
+			public void onFailure(Call<List<Dish>> call, Throwable t) {
+				responseCallback.OnResponseFailure();
+			}
+		});
 	}
 
 	public interface ResponseCallback<T>{

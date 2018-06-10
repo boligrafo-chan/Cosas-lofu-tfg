@@ -1,30 +1,20 @@
 package com.tfg.bangbangtan.restaurantapp.Models;
 
-public class Dish {
+public class Dish extends MenuItem {
 	private int id;
-	private String name;
-	private String image;
 	private String description;
 	private int type;
 	private int subtype;
 	private double price;
 
 
-	public Dish(int id, String image, String name, String description, int type, int subtype, double price){
-		this.image = image;
-		this.name=name;
+	public Dish(String name, String image, String description, int type, int subtype, double price){
 		this.description = description;
 		this.type = type;
 		this.subtype = subtype;
 		this.price=price;
-	}
-
-	public String getImage() {
-		return image;
-	}
-
-	public void setImage(String image) {
-		this.image = image;
+		setName(name);
+		setImage(image);
 	}
 
 	public String getDescription() {
@@ -42,15 +32,6 @@ public class Dish {
 
 	public int getSubtype() {
 		return subtype;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
 	}
 
 	public double getPrice() {

@@ -17,8 +17,6 @@ import com.tfg.bangbangtan.restaurantapp.Utilities.DishTypeAdapter;
 
 import java.util.List;
 
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
 
 	private ListView dishTlistview;
@@ -34,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void OnResponseSuccess(List<DishType> responseObject) {
 				dishTypes = responseObject;
-				DishTypeAdapter dishTypeAdapter = new DishTypeAdapter(MainActivity.this, R.layout.list_item_dishtype, dishTypes);
+				DishTypeAdapter dishTypeAdapter = new DishTypeAdapter(MainActivity.this, R.layout.list_menu_item, dishTypes);
 				dishTlistview.setAdapter(dishTypeAdapter);
 				Toast.makeText(MainActivity.this, "DishTypes obtenidos", Toast.LENGTH_LONG).show();
 			}
@@ -56,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
 						Intent showTypeContent;
 						if (!relatedSubtypes.isEmpty()) { //IR A ACTIVITY CON SUBTIPOS
 							showTypeContent = new Intent(MainActivity.this, DishTypeActivity.class);
-							showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTY, true);
+							showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
 						} else {
 
 							showTypeContent = new Intent(MainActivity.this, DishTypeActivity.class);
-							showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTY, true);
+							showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
 
 						/*showTypeContent = new Intent(MainActivity.this, DishListActivity.class);
 						showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTY, false);

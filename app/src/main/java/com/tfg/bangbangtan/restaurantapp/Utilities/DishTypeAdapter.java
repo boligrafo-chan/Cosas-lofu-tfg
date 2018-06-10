@@ -27,7 +27,6 @@ public class DishTypeAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-
 		return this.dishTypes.size();
 	}
 
@@ -38,7 +37,6 @@ public class DishTypeAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int position) {
-
 		return dishTypes.get(position).getId();
 	}
 
@@ -49,19 +47,16 @@ public class DishTypeAdapter extends BaseAdapter {
 			LayoutInflater layoutInflater = LayoutInflater.from(this.context);
 			convertView = layoutInflater.inflate(this.layout, null);
 			holder = new ViewHolder();
-
-			holder.dishTypeText = convertView.findViewById(R.id.txt_DishType);
-			holder.dishTypeIm = convertView.findViewById(R.id.img_DishType);
+			holder.dishTypeText = convertView.findViewById(R.id.item_text);
+			holder.dishTypeIm = convertView.findViewById(R.id.item_image);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-
 		String name = dishTypes.get(position).getName();
 		String imageUrl = dishTypes.get(position).getImage();
 		Picasso.get().load(imageUrl).into(holder.dishTypeIm);
 		holder.dishTypeText.setText(name);
-
 		return convertView;
 	}
 

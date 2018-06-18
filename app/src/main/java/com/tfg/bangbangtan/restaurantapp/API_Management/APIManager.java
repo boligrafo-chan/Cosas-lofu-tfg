@@ -1,14 +1,10 @@
 package com.tfg.bangbangtan.restaurantapp.API_Management;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.tfg.bangbangtan.restaurantapp.Models.Dish;
 import com.tfg.bangbangtan.restaurantapp.Models.DishSubtype;
 import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.Models.ExtraIngredient;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -78,9 +74,9 @@ public class APIManager {
 	public void getDishes(int dishTypeId, int dishSubtypeId, final ResponseCallback<List<Dish>> responseCallback) {
 		Call<List<Dish>> dishesCall;
 		if(dishSubtypeId == 0){
-			dishesCall = restaurantService.getDishes(dishTypeId);
+			dishesCall = restaurantService.getDishesByType(dishTypeId);
 		}else{
-			dishesCall = restaurantService.getDishes(dishTypeId, dishSubtypeId);
+			dishesCall = restaurantService.getDishesBySubtype(dishSubtypeId);
 		}
 
 		dishesCall.enqueue(new Callback<List<Dish>>() {

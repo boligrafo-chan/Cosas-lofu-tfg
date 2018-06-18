@@ -23,8 +23,8 @@ public interface RestaurantService {
 	Call<List<DishType>> getAllDishTypes();
 
 	@GET("dishTypes/{dishTypeId}/dishes")
-	Call<List<Dish>> getDishes(@Path("dishTypeId") int dishTypeId);
+	Call<List<Dish>> getDishesByType(@Path("dishTypeId") int dishTypeId);
 
-	@GET("dishTypes/{dishTypeId}/dishSubtypes/{dishSubtypeId}/dishes")
-	Call<List<Dish>> getDishes(@Path("dishTypeId") int dishTypeId, @Path("dishSubtypeId") int dishSubtypeId);
+	@GET("dishSubtypes/{dishSubtypeId}/dishes")
+	Call<List<Dish>> getDishesBySubtype(@Path("dishSubtypeId") int dishSubtypeId);
 }

@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -34,6 +35,9 @@ public class DishSubtypeActivity extends AppCompatActivity {
 	RecyclerView dishSubtypesListView;
 	ItemMenuAdapter<DishSubtype> itemMenuAdapter;
 
+	@BindView(R.id.paymentButton)
+	FloatingActionButton floatingButton;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,7 +46,7 @@ public class DishSubtypeActivity extends AppCompatActivity {
 		dishSubtypes = new ArrayList<>();
 		dishSubtypeViewModel = ViewModelProviders.of(this).get(DishSubtypeViewModel.class);
 
-		itemMenuAdapter = new ItemMenuAdapter<>(dishSubtypes, new Listener());
+		itemMenuAdapter = new ItemMenuAdapter<>(dishSubtypes, this::onItemClick);
 		dishSubtypesListView.setAdapter(itemMenuAdapter);
 
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -52,20 +56,24 @@ public class DishSubtypeActivity extends AppCompatActivity {
 
 		int dishTypeId = getIntent().getIntExtra(AppString.CLICKED_ITEM_ID, 0);
 
+		floatingButton.setOnClickListener(this::onClickCartButton);
+
 		loadDishSubtypes(dishTypeId);
 	}
 
-	private class Listener implements AdapterView.OnItemClickListener{
-		@Override
-		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-			Intent showDishes;
-			showDishes = new Intent(DishSubtypeActivity.this, DishesActivity.class);
-			showDishes.putExtra(AppString.DISH_TYPE_ID, dishSubtypes.get(position).getDishTypeId());
-			showDishes.putExtra(AppString.DISH_SUBTYPE_ID, dishSubtypes.get(position).getId());
-			startActivity(showDishes);
-		}
+	private void onClickCartButton(View v) {
+		Intent backToMenu;
+		backToMenu = new Intent(DishSubtypeActivity.this, OrderActivity.class);
+		startActivity(backToMenu);
 	}
 
+	private void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		Intent showDishes;
+		showDishes = new Intent(DishSubtypeActivity.this, DishesActivity.class);
+		showDishes.putExtra(AppString.DISH_TYPE_ID, dishSubtypes.get(position).getDishTypeId());
+		showDishes.putExtra(AppString.DISH_SUBTYPE_ID, dishSubtypes.get(position).getId());
+		startActivity(showDishes);
+	}
 
 	private void loadDishSubtypes(int dishTypeId) {
 		final LiveData<List<DishSubtype>> dishSubtypesLiveData = dishSubtypeViewModel.getDishSubtypesList(dishTypeId);

@@ -5,6 +5,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,13 +13,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.R;
 import com.tfg.bangbangtan.restaurantapp.Utilities.AppString;
-import com.tfg.bangbangtan.restaurantapp.Utilities.DishTypeAdapter;
 import com.tfg.bangbangtan.restaurantapp.Utilities.ItemMenuAdapter;
 import com.tfg.bangbangtan.restaurantapp.ViewModels.DishTypeViewModel;
 
@@ -27,7 +26,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnItemClick;
 
 public class DishTypeActivity extends AppCompatActivity {
 
@@ -41,21 +39,34 @@ public class DishTypeActivity extends AppCompatActivity {
 	//DishTypeAdapter dishTypeAdapter;
 	ItemMenuAdapter<DishType> itemMenuAdapter;
 
+	@BindView(R.id.paymentButton)
+	FloatingActionButton floatingButton;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.recycler_list);
 		ButterKnife.bind(this);
-		dishTypes = new ArrayList<>();
 		dishTypeViewModel = ViewModelProviders.of(this).get(DishTypeViewModel.class);
+
+		dishTypes = new ArrayList<>();
 		itemMenuAdapter = new ItemMenuAdapter<>(dishTypes, new Listener());
 		dishTypesListView.setAdapter(itemMenuAdapter);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 		dishTypesListView.setLayoutManager(linearLayoutManager);
 		dishTypesListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+
+		floatingButton.setOnClickListener(this::onClickCartButton);
+
 		loadDishTypes();
+	}
+
+	private void onClickCartButton(View v) {
+		Intent backToMenu;
+		backToMenu = new Intent(DishTypeActivity.this, OrderActivity.class);
+		startActivity(backToMenu);
 	}
 
 	private class Listener implements AdapterView.OnItemClickListener {

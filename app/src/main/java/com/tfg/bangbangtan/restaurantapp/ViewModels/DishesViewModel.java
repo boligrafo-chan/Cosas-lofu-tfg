@@ -6,20 +6,20 @@ import android.arch.lifecycle.LiveData;
 import android.support.annotation.NonNull;
 
 import com.tfg.bangbangtan.restaurantapp.Models.Dish;
-import com.tfg.bangbangtan.restaurantapp.Repositories.DishesRepository;
+import com.tfg.bangbangtan.restaurantapp.Repositories.DishRepository;
 
 import java.util.List;
 
 public class DishesViewModel extends AndroidViewModel {
 
-	DishesRepository dishesRepository;
+	private DishRepository dishRepository;
 
 	public DishesViewModel(@NonNull Application application) {
 		super(application);
-		dishesRepository = new DishesRepository();
+		dishRepository = new DishRepository();
 	}
 
 	public LiveData<List<Dish>> getDishes(int dishTypeId, int dishSubtypeId){
-		return dishesRepository.getDishes(dishTypeId, dishSubtypeId);
+		return dishRepository.getDishes(dishTypeId, dishSubtypeId);
 	}
 }

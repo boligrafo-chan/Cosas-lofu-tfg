@@ -1,17 +1,21 @@
 package com.tfg.bangbangtan.restaurantapp.Models;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Dish extends MenuItem {
 	private int id;
 	private String description;
-	private int type;
-	private int subtype;
+	@SerializedName("dish_type_id")
+	private int dishTypeId;
+	@SerializedName("dish_subtype_id")
+	private int dishSubtypeId;
 	private double price;
 
 
-	public Dish(String name, String image, String description, int type, int subtype, double price){
+	public Dish(String name, String image, String description, int dishTypeId, int dishSubtypeId, double price){
 		this.description = description;
-		this.type = type;
-		this.subtype = subtype;
+		this.dishTypeId = dishTypeId;
+		this.dishSubtypeId = dishSubtypeId;
 		this.price=price;
 		setName(name);
 		setImage(image);
@@ -25,13 +29,13 @@ public class Dish extends MenuItem {
 		this.description = description;
 	}
 
-	public int getType() {
-		return type;
+	public int getDishTypeId() {
+		return dishTypeId;
 	}
 
 
-	public int getSubtype() {
-		return subtype;
+	public int getDishSubtypeId() {
+		return dishSubtypeId;
 	}
 
 	public double getPrice() {

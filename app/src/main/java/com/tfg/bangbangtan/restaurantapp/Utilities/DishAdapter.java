@@ -61,7 +61,7 @@ public class DishAdapter extends BaseAdapter {
 
 			holder.dishText= (TextView) convertView.findViewById(R.id.txt_Dish);
 			holder.dishIm= (ImageView) convertView.findViewById(R.id.img_Dish);
-			convertView.setTag(holder);
+			convertView.setTag(holder); //bind de convert view con los objetos
 		}
 		else{
 			holder= (ViewHolder) convertView.getTag();

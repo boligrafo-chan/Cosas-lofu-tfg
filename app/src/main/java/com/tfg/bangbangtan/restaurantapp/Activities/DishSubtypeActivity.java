@@ -51,6 +51,7 @@ public class DishSubtypeActivity extends AppCompatActivity {
 		dishSubtypesListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
 		int dishTypeId = getIntent().getIntExtra(AppString.CLICKED_ITEM_ID, 0);
+
 		loadDishSubtypes(dishTypeId);
 	}
 

@@ -4,6 +4,7 @@ public class ExtraIngredient {
 	private int id;
 	private String name;
 	private double price;
+	private int quantity;
 
 	public ExtraIngredient(int id, String name, double price){
 
@@ -28,5 +29,14 @@ public class ExtraIngredient {
 	public double getPrice() {
 		return price;
 	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
 
 }

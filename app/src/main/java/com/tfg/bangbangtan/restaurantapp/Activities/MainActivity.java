@@ -54,11 +54,11 @@ public class MainActivity extends AppCompatActivity {
 						Intent showTypeContent;
 						if (!relatedSubtypes.isEmpty()) { //IR A ACTIVITY CON SUBTIPOS
 							showTypeContent = new Intent(MainActivity.this, DishTypeActivity.class);
-							showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
+							//showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
 						} else {
 
 							showTypeContent = new Intent(MainActivity.this, DishTypeActivity.class);
-							showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
+							//showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
 
 						/*showTypeContent = new Intent(MainActivity.this, DishListActivity.class);
 						showTypeContent.putExtra(AppString.CLICKED_HAS_SUBTY, false);

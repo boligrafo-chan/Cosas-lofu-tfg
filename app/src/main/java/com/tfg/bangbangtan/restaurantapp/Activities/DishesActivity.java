@@ -3,6 +3,7 @@ package com.tfg.bangbangtan.restaurantapp.Activities;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +34,7 @@ public class DishesActivity extends AppCompatActivity {
 	@BindView(R.id.recycler_list_view)
 	RecyclerView dishesListView;
 	ItemMenuAdapter<Dish> itemMenuAdapter;
+	private int dishTypeId;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,7 @@ public class DishesActivity extends AppCompatActivity {
 		dishesListView.setLayoutManager(linearLayoutManager);
 		dishesListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
-		int dishTypeId = getIntent().getIntExtra(AppString.DISH_TYPE_ID, 0);
+		dishTypeId = getIntent().getIntExtra(AppString.DISH_TYPE_ID, 0);
 		int dishSubtypeId = getIntent().getIntExtra(AppString.DISH_SUBTYPE_ID, 0);
 		loadDishes(dishTypeId, dishSubtypeId);
 	}
@@ -59,6 +61,12 @@ public class DishesActivity extends AppCompatActivity {
 		@Override
 		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 			Toast.makeText(DishesActivity.this, "Click en Dish " + position, Toast.LENGTH_SHORT).show();
+			Intent showDetail;
+			showDetail = new Intent( DishesActivity.this, DishDetailActivity.class);
+			int dishId = dishes.get(position).getId();
+			showDetail.putExtra(AppString.CLICKED_ITEM_ID, dishId);
+			showDetail.putExtra(AppString.DISH_TYPE_ID, dishTypeId);
+			startActivity(showDetail);
 		}
 	}
 

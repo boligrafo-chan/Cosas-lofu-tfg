@@ -7,6 +7,11 @@ import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -14,6 +19,7 @@ import com.tfg.bangbangtan.restaurantapp.Models.DishType;
 import com.tfg.bangbangtan.restaurantapp.R;
 import com.tfg.bangbangtan.restaurantapp.Utilities.AppString;
 import com.tfg.bangbangtan.restaurantapp.Utilities.DishTypeAdapter;
+import com.tfg.bangbangtan.restaurantapp.Utilities.ItemMenuAdapter;
 import com.tfg.bangbangtan.restaurantapp.ViewModels.DishTypeViewModel;
 
 import java.util.ArrayList;
@@ -25,38 +31,52 @@ import butterknife.OnItemClick;
 
 public class DishTypeActivity extends AppCompatActivity {
 
-	@BindView(R.id.mainDishTypeList)
-	ListView dishTypesListView;
 
 	DishTypeViewModel dishTypeViewModel;
-	DishTypeAdapter dishTypeAdapter;
 	List<DishType> dishTypes;
+
+	//@BindView(R.id.mainDishTypeList)
+	@BindView(R.id.recycler_list_view)
+	RecyclerView dishTypesListView;
+	//DishTypeAdapter dishTypeAdapter;
+	ItemMenuAdapter<DishType> itemMenuAdapter;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.recycler_list);
 		ButterKnife.bind(this);
 		dishTypes = new ArrayList<>();
 		dishTypeViewModel = ViewModelProviders.of(this).get(DishTypeViewModel.class);
-		dishTypeAdapter = new DishTypeAdapter(DishTypeActivity.this, R.layout.list_menu_item, dishTypes);
-		dishTypesListView.setAdapter(dishTypeAdapter);
+		itemMenuAdapter = new ItemMenuAdapter<>(dishTypes, new Listener());
+		dishTypesListView.setAdapter(itemMenuAdapter);
+		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+		dishTypesListView.setLayoutManager(linearLayoutManager);
+		dishTypesListView.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 		loadDishTypes();
 	}
 
-	@OnItemClick(R.id.mainDishTypeList)
-	public void onItemClick(int position) {
-		boolean hasSubtypes = dishTypes.get(position).getHasSubtypes();
-		if (hasSubtypes) {
-			//IR A ACTIVITY CON SUBTIPOS
-			Intent showSubtypes;
-			showSubtypes = new Intent(DishTypeActivity.this, DishSubtypeActivity.class);
-			showSubtypes.putExtra(AppString.CLICKED_HAS_SUBTYPE, true);
-			showSubtypes.putExtra(AppString.CLICKED_ITEM_ID, dishTypes.get(position).getId());
-			startActivity(showSubtypes);
-		}else {
-			//IR A ACTIVITY CON PLATOS
-			Toast.makeText(DishTypeActivity.this, "Tipo de plato sin subtipos", Toast.LENGTH_SHORT).show();
+	private class Listener implements AdapterView.OnItemClickListener {
+		@Override
+		public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			boolean hasSubtypes = dishTypes.get(position).getHasSubtypes();
+
+			if (hasSubtypes) {
+				//IR A ACTIVITY CON SUBTIPOS
+				Intent showSubtypes;
+				showSubtypes = new Intent(DishTypeActivity.this, DishSubtypeActivity.class);
+				showSubtypes.putExtra(AppString.CLICKED_ITEM_ID, dishTypes.get(position).getId());
+				startActivity(showSubtypes);
+			} else {
+				//IR A ACTIVITY CON PLATOS
+				Intent showDishes;
+				showDishes = new Intent(DishTypeActivity.this, DishSubtypeActivity.class);
+				showDishes.putExtra(AppString.DISH_TYPE_ID, dishTypes.get(position).getId());
+				startActivity(showDishes);
+				Toast.makeText(DishTypeActivity.this, "Tipo de plato sin subtipos", Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
@@ -70,7 +90,7 @@ public class DishTypeActivity extends AppCompatActivity {
 	private void updateDishTypesOnUI(List<DishType> dishTypes) {
 		this.dishTypes.clear();
 		this.dishTypes.addAll(dishTypes);
-		dishTypeAdapter.notifyDataSetChanged();
+		itemMenuAdapter.notifyDataSetChanged();
 		Toast.makeText(DishTypeActivity.this, "DishTypes obtenidos", Toast.LENGTH_LONG).show();
 	}
 

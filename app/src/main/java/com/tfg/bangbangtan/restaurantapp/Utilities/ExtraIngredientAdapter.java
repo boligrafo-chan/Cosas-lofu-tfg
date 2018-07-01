@@ -20,11 +20,14 @@ import butterknife.ButterKnife;
 
 public class ExtraIngredientAdapter extends RecyclerView.Adapter<ExtraIngredientAdapter.ViewHolder> {
 
-    private AdapterView.OnItemSelectedListener listener;
+    private OnSelectQuantityListener listener;
     private List<ExtraIngredient> extras;
 
+    public interface OnSelectQuantityListener{
+        void onSelectQuantity(int position);
+    }
 
-   public ExtraIngredientAdapter(List<ExtraIngredient> extras, AdapterView.OnItemSelectedListener listener){
+   public ExtraIngredientAdapter(List<ExtraIngredient> extras, OnSelectQuantityListener listener){
 
     this.extras=extras;
     this.listener=listener;
@@ -66,7 +69,7 @@ public class ExtraIngredientAdapter extends RecyclerView.Adapter<ExtraIngredient
             amount_spinner.setAdapter(spinnerAdapter);
         }
 
-        void bind(final ExtraIngredient extraIngredient, final AdapterView.OnItemSelectedListener listener) {
+        void bind(final ExtraIngredient extraIngredient, final OnSelectQuantityListener listener) {
 
             this.name_txt.setText(extraIngredient.getName());
             this.price_txt.setText(String.format("%s", extraIngredient.getPrice()));
@@ -77,13 +80,11 @@ public class ExtraIngredientAdapter extends RecyclerView.Adapter<ExtraIngredient
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     extras.get(getAdapterPosition()).setQuantity(position);// EN ESTE CASO POSITION= ID NUM DEL 0-9
-                    listener.onItemSelected(parent,view,getAdapterPosition(),position);
+                    listener.onSelectQuantity(position);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
-                    listener.onNothingSelected(parent);
-
                 }
             });
         }

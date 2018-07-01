@@ -33,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DishDetailActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class DishDetailActivity extends AppCompatActivity {
 
 	DishDetailViewModel dishDetailViewModel;
 	Dish dish;
@@ -69,7 +69,6 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 	@BindView(R.id.button2)
 	Button button2;
 
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -78,7 +77,7 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 		dishDetailViewModel = ViewModelProviders.of(this).get(DishDetailViewModel.class);
 		extraIngredients = new ArrayList<>();
 
-		extraIngredientAdapter = new ExtraIngredientAdapter(extraIngredients, this);
+		extraIngredientAdapter = new ExtraIngredientAdapter(extraIngredients, this::onSelectExtraIngredientQuantity);
 		extra_ing_list_view.setAdapter(extraIngredientAdapter);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -89,40 +88,16 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 		loadDish(dishId);
 		loadExtraIngredients(typeId);
 
-		button2.setOnClickListener(v -> {
-			Intent backToMenu;
-			backToMenu = new Intent(DishDetailActivity.this, OrderActivity.class);
-			startActivity(backToMenu);
-		});
-		add_to_order.setOnClickListener(v -> {
-			if (dish != null) {
-				CustomDish customDish = new CustomDish(dish.getId(), Double.parseDouble(total_price_txt.getText().toString()), description_txt.getText().toString());
-				customDish.setSelectedExtraIngredients(extraIngredients);
-				Order.getInstance().addCustomDish(customDish);
-				double currentCost = Order.getInstance().getCost() + customDish.getCost();
-				Order.getInstance().setCost(currentCost);
-
-				Toast.makeText(DishDetailActivity.this, "Se ha añadido el plato", Toast.LENGTH_LONG).show();
-				Intent backToMenu;
-				backToMenu = new Intent(DishDetailActivity.this, DishTypeActivity.class);
-				startActivity(backToMenu);
-			}
-		});
+		button2.setOnClickListener(this::onClickButton2);
+		add_to_order.setOnClickListener(this::onClickAddToOrder);
 	}
 
-	//TODO Reemplazar con un callback propio que no reciba parametros
-	@Override
-	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+	private void onSelectExtraIngredientQuantity(int position) {
 		double price = dish.getPrice();
 		for (ExtraIngredient extraIngredient : extraIngredients) {
 			price += extraIngredient.getQuantity() * extraIngredient.getPrice();
 		}
 		total_price_txt.setText(String.format("%s", price));
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> parent) {
-
 	}
 
 	private void loadDish(int dishId) {
@@ -158,6 +133,26 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 		extraIngredientAdapter.notifyDataSetChanged();
 	}
 
+	private void onClickAddToOrder(View v) {
+		if (dish != null) {
+			CustomDish customDish = new CustomDish(dish.getId(), Double.parseDouble(total_price_txt.getText().toString()), description_txt.getText().toString());
+			customDish.setSelectedExtraIngredients(extraIngredients);
+			Order.getInstance().addCustomDish(customDish);
+			double currentCost = Order.getInstance().getCost() + customDish.getCost();
+			Order.getInstance().setCost(currentCost);
+
+			Toast.makeText(DishDetailActivity.this, "Se ha añadido el plato", Toast.LENGTH_LONG).show();
+			Intent backToMenu;
+			backToMenu = new Intent(DishDetailActivity.this, DishTypeActivity.class);
+			startActivity(backToMenu);
+		}
+	}
+
+	private void onClickButton2(View v) {
+		Intent backToMenu;
+		backToMenu = new Intent(DishDetailActivity.this, OrderActivity.class);
+		startActivity(backToMenu);
+	}
 
 	private class ObserverDish implements Observer<Dish> {
 		private LiveData<Dish> dishLiveData;
@@ -191,7 +186,5 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 			}
 		}
 	}
-
-
 }
 

@@ -36,10 +36,10 @@
 
     <Spinner
         android:id="@+id/extra_amount_spinner"
-        android:background="#FFFFFF"
         android:layout_width="50dp"
-        android:layout_height="62dp"
+        android:layout_height="32dp"
         android:layout_gravity="center_vertical"
         android:layout_margin="10dp"
-        android:layout_weight="0.2" />
+        android:layout_weight="0.2"
+        android:background="#FFFFFF" />
 </LinearLayout>

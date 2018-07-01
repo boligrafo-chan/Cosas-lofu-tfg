@@ -72,14 +72,14 @@ public class ExtraIngredientAdapter extends RecyclerView.Adapter<ExtraIngredient
         void bind(final ExtraIngredient extraIngredient, final OnSelectQuantityListener listener) {
 
             this.name_txt.setText(extraIngredient.getName());
-            this.price_txt.setText(String.format("%s", extraIngredient.getPrice()));
-            this.amount_spinner.setSelection(0); // la pos cero es tambien cantidad 0 en el array @string
+            this.price_txt.setText(String.format("%s €", extraIngredient.getPrice()));
+            this.amount_spinner.setSelection(extraIngredient.getQuantity()); // la pos cero es tambien cantidad 0 en el array @string
 
             // Añadimos el listener click para cada elemento spinner
             this.amount_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    extras.get(getAdapterPosition()).setQuantity(position);// EN ESTE CASO POSITION= ID NUM DEL 0-9
+                    extras.get(getAdapterPosition()).setQuantity(position);// EN ESTE CASO POSITION = ID NUM DEL 0-9
                     listener.onSelectQuantity(position);
                 }
 

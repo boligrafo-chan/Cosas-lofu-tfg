@@ -89,7 +89,7 @@
 
     <TextView
         android:id="@+id/dish_description_txt"
-        android:layout_width="348dp"
+        android:layout_width="390dp"
         android:layout_height="176dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
@@ -98,10 +98,10 @@
         android:textSize="15sp"
         app:layout_constraintBottom_toTopOf="@+id/extra_ing_list_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.414"
+        app:layout_constraintHorizontal_bias="0.551"
         app:layout_constraintStart_toEndOf="@+id/dish_detail_img"
         app:layout_constraintTop_toBottomOf="@+id/dish_name_txt"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/dish_name_txt"
@@ -109,7 +109,7 @@
         android:layout_height="72dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="44dp"
         android:text="@string/default_text"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -151,22 +151,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dish_detail_img"
         app:layout_constraintVertical_bias="0.175" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="88dp"
-        android:layout_height="61dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.516" />
-
 
 
 </android.support.constraint.ConstraintLayout>

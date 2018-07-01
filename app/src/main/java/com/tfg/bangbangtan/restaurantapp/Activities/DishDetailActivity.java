@@ -35,11 +35,11 @@ import butterknife.ButterKnife;
 
 public class DishDetailActivity extends AppCompatActivity {
 
-	DishDetailViewModel dishDetailViewModel;
-	Dish dish;
-	List<ExtraIngredient> extraIngredients;
-	//ArrayAdapter<CharSequence> spinnerAdapter;
-	ExtraIngredientAdapter extraIngredientAdapter;
+	private DishDetailViewModel dishDetailViewModel;
+	private Dish dish;
+	private List<ExtraIngredient> extraIngredients;
+	private ExtraIngredientAdapter extraIngredientAdapter;
+	private double totalPrice;
 
 	@BindView(R.id.add_dish_to_order_button)
 	Button add_to_order;
@@ -65,10 +65,6 @@ public class DishDetailActivity extends AppCompatActivity {
 	@BindView(R.id.extra_ing_list_view)
 	RecyclerView extra_ing_list_view;
 
-	//PRUEBAS
-	@BindView(R.id.button2)
-	Button button2;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -88,16 +84,15 @@ public class DishDetailActivity extends AppCompatActivity {
 		loadDish(dishId);
 		loadExtraIngredients(typeId);
 
-		button2.setOnClickListener(this::onClickButton2);
 		add_to_order.setOnClickListener(this::onClickAddToOrder);
 	}
 
 	private void onSelectExtraIngredientQuantity(int position) {
-		double price = dish.getPrice();
+		totalPrice = dish.getPrice();
 		for (ExtraIngredient extraIngredient : extraIngredients) {
-			price += extraIngredient.getQuantity() * extraIngredient.getPrice();
+			totalPrice += extraIngredient.getQuantity() * extraIngredient.getPrice();
 		}
-		total_price_txt.setText(String.format("%s", price));
+		total_price_txt.setText(String.format("%.2f €", totalPrice));
 	}
 
 	private void loadDish(int dishId) {
@@ -123,8 +118,8 @@ public class DishDetailActivity extends AppCompatActivity {
 		Picasso.get().load(dish.getImage()).into(dish_image);
 		name_txt.setText(dish.getName());
 		description_txt.setText(dish.getDescription());
-		price_txt.setText(String.format("%s", dish.getPrice()));
-
+		totalPrice = dish.getPrice();
+		price_txt.setText(String.format("%s€", dish.getPrice()));
 	}
 
 	private void updateExtraIngredients(List<ExtraIngredient> extraIngredients) {
@@ -135,7 +130,7 @@ public class DishDetailActivity extends AppCompatActivity {
 
 	private void onClickAddToOrder(View v) {
 		if (dish != null) {
-			CustomDish customDish = new CustomDish(dish.getId(), Double.parseDouble(total_price_txt.getText().toString()), description_txt.getText().toString());
+			CustomDish customDish = new CustomDish(dish.getId(), totalPrice, comment_input.getText().toString());
 			customDish.setSelectedExtraIngredients(extraIngredients);
 			Order.getInstance().addCustomDish(customDish);
 			double currentCost = Order.getInstance().getCost() + customDish.getCost();
@@ -146,12 +141,6 @@ public class DishDetailActivity extends AppCompatActivity {
 			backToMenu = new Intent(DishDetailActivity.this, DishTypeActivity.class);
 			startActivity(backToMenu);
 		}
-	}
-
-	private void onClickButton2(View v) {
-		Intent backToMenu;
-		backToMenu = new Intent(DishDetailActivity.this, OrderActivity.class);
-		startActivity(backToMenu);
 	}
 
 	private class ObserverDish implements Observer<Dish> {

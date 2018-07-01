@@ -13,18 +13,21 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:screenOrientation="sensorLandscape">
         <activity
             android:name=".Activities.MainActivity"
             android:label="@string/title_activity_main"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="sensorLandscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
         <activity
             android:name=".Activities.DishTypeActivity"
-            android:label="Tipos de plato">
+            android:label="Tipos de plato"
+            android:screenOrientation="sensorLandscape" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,14 +36,18 @@
         </activity>
         <activity
             android:name=".Activities.DishSubtypeActivity"
-            android:label="Subtipos de plato" />
+            android:label="Subtipos de plato"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".Activities.DishesActivity"
-            android:label="Platos" />
+            android:label="Platos"
+            android:screenOrientation="sensorLandscape" />
         <activity
             android:name=".Activities.DishDetailActivity"
-            android:label="Detalle de plato" />
-        <activity android:name=".Activities.OrderActivity"></activity>
+            android:label="Detalle de plato"
+            android:screenOrientation="sensorLandscape" />
+        <activity android:name=".Activities.OrderActivity"
+            android:screenOrientation="sensorLandscape" />
     </application>
 
 </manifest>

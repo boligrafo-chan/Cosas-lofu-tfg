@@ -65,7 +65,7 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 	@BindView(R.id.extra_ing_list_view)
 	RecyclerView extra_ing_list_view;
 
-//PRUEBAS
+	//PRUEBAS
 	@BindView(R.id.button2)
 	Button button2;
 
@@ -89,32 +89,25 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 		loadDish(dishId);
 		loadExtraIngredients(typeId);
 
-		button2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
+		button2.setOnClickListener(v -> {
+			Intent backToMenu;
+			backToMenu = new Intent(DishDetailActivity.this, OrderActivity.class);
+			startActivity(backToMenu);
+		});
+		add_to_order.setOnClickListener(v -> {
+			if (dish != null) {
+				CustomDish customDish = new CustomDish(dish.getId(), Double.parseDouble(total_price_txt.getText().toString()), description_txt.getText().toString());
+				customDish.setSelectedExtraIngredients(extraIngredients);
+				Order.getInstance().addCustomDish(customDish);
+				double currentCost = Order.getInstance().getCost() + customDish.getCost();
+				Order.getInstance().setCost(currentCost);
+
+				Toast.makeText(DishDetailActivity.this, "Se ha añadido el plato", Toast.LENGTH_LONG).show();
 				Intent backToMenu;
-				backToMenu = new Intent(DishDetailActivity.this, OrderActivity.class);
+				backToMenu = new Intent(DishDetailActivity.this, DishTypeActivity.class);
 				startActivity(backToMenu);
 			}
 		});
-		add_to_order.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (dish !=null) {
-					CustomDish customDish = new CustomDish(dish.getId(),Double.parseDouble(total_price_txt.getText().toString()),description_txt.getText().toString());
-					customDish.setSelectedExtraIngredients(extraIngredients);
-					Order.getInstance().addCustomDish(customDish);
-					double currentCost= Order.getInstance().getCost()+customDish.getCost();
-					Order.getInstance().setCost(currentCost);
-
-					Toast.makeText(DishDetailActivity.this,"Se ha añadido el plato",Toast.LENGTH_LONG).show();
-					Intent backToMenu;
-					backToMenu = new Intent(DishDetailActivity.this, DishTypeActivity.class);
-					startActivity(backToMenu);
-				}
-			}
-		}
-		);
 	}
 
 	//TODO Reemplazar con un callback propio que no reciba parametros
@@ -138,12 +131,14 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 		dishLiveData.removeObservers(this);
 		dishLiveData.observe(DishDetailActivity.this, dishResponseObserver);
 	}
-	private void loadExtraIngredients(int dishTypeId){
-		final LiveData<List<ExtraIngredient>> extraIngredientsLiveData= dishDetailViewModel.getExtraIngredients(dishTypeId);
-		Observer<List<ExtraIngredient>> extraIngredientsResponseObserver= new ObserverExtraIngredients(extraIngredientsLiveData);
+
+	private void loadExtraIngredients(int dishTypeId) {
+		final LiveData<List<ExtraIngredient>> extraIngredientsLiveData = dishDetailViewModel.getExtraIngredients(dishTypeId);
+		Observer<List<ExtraIngredient>> extraIngredientsResponseObserver = new ObserverExtraIngredients(extraIngredientsLiveData);
 		extraIngredientsLiveData.removeObservers(this);
 		extraIngredientsLiveData.observe(DishDetailActivity.this, extraIngredientsResponseObserver);
 	}
+
 	private void updateDishes(Dish dish) {
 		this.dish = dish;
 		setDishDataOnUI(dish);
@@ -156,7 +151,8 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 		price_txt.setText(String.format("%s", dish.getPrice()));
 
 	}
-	private void updateExtraIngredients(List<ExtraIngredient> extraIngredients){
+
+	private void updateExtraIngredients(List<ExtraIngredient> extraIngredients) {
 		this.extraIngredients.clear();
 		this.extraIngredients.addAll(extraIngredients);
 		extraIngredientAdapter.notifyDataSetChanged();
@@ -178,23 +174,23 @@ public class DishDetailActivity extends AppCompatActivity implements AdapterView
 			}
 		}
 	}
-	private class ObserverExtraIngredients implements Observer<List<ExtraIngredient>>{
+
+	private class ObserverExtraIngredients implements Observer<List<ExtraIngredient>> {
 
 		private LiveData<List<ExtraIngredient>> extraIngredientsLiveData;
-		ObserverExtraIngredients(LiveData<List<ExtraIngredient>> extraIngredientsLiveData){
-			this.extraIngredientsLiveData=extraIngredientsLiveData;
+
+		ObserverExtraIngredients(LiveData<List<ExtraIngredient>> extraIngredientsLiveData) {
+			this.extraIngredientsLiveData = extraIngredientsLiveData;
 		}
 
 		@Override
 		public void onChanged(@Nullable List<ExtraIngredient> extraIngredients) {
-			if(extraIngredients!=null){
+			if (extraIngredients != null) {
 				updateExtraIngredients(extraIngredients);
 				extraIngredientsLiveData.removeObserver(this);
 			}
 		}
 	}
-
-
 
 
 }

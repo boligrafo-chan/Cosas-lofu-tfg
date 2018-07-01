@@ -102,9 +102,9 @@ public class APIManager {
 
 	public void getDishes(int dishTypeId, int dishSubtypeId, final ResponseCallback<List<Dish>> responseCallback) {
 		Call<List<Dish>> dishesCall;
-		if(dishSubtypeId == 0){
+		if (dishSubtypeId == 0) {
 			dishesCall = restaurantService.getDishesFromType(dishTypeId);
-		}else{
+		} else {
 			dishesCall = restaurantService.getDishesFromSubtype(dishSubtypeId);
 		}
 
@@ -137,12 +137,8 @@ public class APIManager {
 		});
 	}
 
-	public interface ResponseCallback<T>{
-		void OnResponseSuccess(T responseObject);
-		void OnResponseFailure();
-	}
-	public void getOrder(int orderId){
-		Call<Order> orderCall =restaurantService.getOrder(orderId);
+	public void getOrder(int orderId) {
+		Call<Order> orderCall = restaurantService.getOrder(orderId);
 		orderCall.enqueue(new Callback<Order>() {
 			@Override
 			public void onResponse(Call<Order> call, Response<Order> response) {
@@ -155,12 +151,17 @@ public class APIManager {
 			}
 		});
 	}
-	public void createOrder(final ResponseCallback<Order> responseCallback){
-		Call<Order> orderCall= restaurantService.createOrder(Order.getInstance().getCost(),Order.getInstance().getTableId());
+
+	public void createOrder(final ResponseCallback<Order> responseCallback) {
+		Call<Order> orderCall = restaurantService.createOrder(Order.getInstance().getCost(), Order.getInstance().getTableId());
 		orderCall.enqueue(new Callback<Order>() {
 			@Override
 			public void onResponse(Call<Order> call, Response<Order> response) {
-				responseCallback.OnResponseSuccess(response.body());
+				if (response.code() == 201) {
+					responseCallback.OnResponseSuccess(response.body());
+				} else {
+					responseCallback.OnResponseFailure();
+				}
 			}
 
 			@Override
@@ -170,41 +171,50 @@ public class APIManager {
 		});
 	}
 
-	public void createCustomDish(final CustomDish customDish, final ResponseCallback<CustomDish> responseCallback){
-		if (Order.getInstance().getId()!=0) {
-			Call<CustomDish> customDishCall = restaurantService.createCustomDish(Order.getInstance().getId(),customDish.getComment(), customDish.getCost(),customDish.getDishId());
+	public void createCustomDish(final CustomDish customDish, final ResponseCallback<CustomDish> responseCallback) {
+		if (Order.getInstance().getId() != 0) {
+			Call<CustomDish> customDishCall = restaurantService.createCustomDish(Order.getInstance().getId(), customDish.getComment(), customDish.getCost(), customDish.getDishId());
 
 			customDishCall.enqueue(new Callback<CustomDish>() {
-				@Override //solo si se puede crear el custom dish se crea la relacion con sus extra ingredients
+				@Override
 				public void onResponse(Call<CustomDish> call, Response<CustomDish> response) {
-					if (response.code()==201) {
-						List<ExtraIngredient> extraIngredients = customDish.getSelectedExtraIngredients();
-						for (ExtraIngredient extraIngredient : extraIngredients) {
-							Call<List<ExtraIngredient>> extraCall = restaurantService.addExtraIngredientToCustomDish(extraIngredient.getQuantity(), Order.getInstance().getId(), response.body().getId(), extraIngredient.getId());
-							extraCall.enqueue(new Callback<List<ExtraIngredient>>() {
-								@Override
-								public void onResponse(Call<List<ExtraIngredient>> call, Response<List<ExtraIngredient>> response) {
-
-								}
-
-								@Override
-								public void onFailure(Call<List<ExtraIngredient>> call, Throwable t) {
-
-								}
-							});
-						}
-
+					if (response.code() == 201) {
 						responseCallback.OnResponseSuccess(response.body());
+					} else {
+						responseCallback.OnResponseFailure();
 					}
-					else{
-					responseCallback.OnResponseFailure();}
 				}
 
 				@Override
 				public void onFailure(Call<CustomDish> call, Throwable t) {
-				responseCallback.OnResponseFailure();
+					responseCallback.OnResponseFailure();
 				}
 			});
 		}
+	}
+
+	public void addExtraIngredientToCustomDish(final CustomDish customDish, final ExtraIngredient extraIngredient, final ResponseCallback<List<ExtraIngredient>> responseCallback) {
+		Call<List<ExtraIngredient>> extraCall = restaurantService.addExtraIngredientToCustomDish(Order.getInstance().getId(), customDish.getId(), extraIngredient.getId(), extraIngredient.getQuantity());
+		extraCall.enqueue(new Callback<List<ExtraIngredient>>() {
+			@Override
+			public void onResponse(Call<List<ExtraIngredient>> call, Response<List<ExtraIngredient>> response) {
+				if(response.code() == 200){
+					responseCallback.OnResponseSuccess(response.body());
+				}
+				else{
+					responseCallback.OnResponseFailure();
+				}
+			}
+
+			@Override
+			public void onFailure(Call<List<ExtraIngredient>> call, Throwable t) {
+				responseCallback.OnResponseFailure();
+			}
+		});
+	}
+
+	public interface ResponseCallback<T> {
+		void OnResponseSuccess(T responseObject);
+		void OnResponseFailure();
 	}
 }

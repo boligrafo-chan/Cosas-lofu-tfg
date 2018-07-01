@@ -59,10 +59,10 @@ public interface RestaurantService {
 
 	@FormUrlEncoded
 	@PUT("orders/{order}/customDishes/{customDish}/extraIngredients/{extraIngredient}")
-	Call<List<ExtraIngredient>> addExtraIngredientToCustomDish(@Field("quantity") int quantity,
-	                                                           @Path("order") int order,
+	Call<List<ExtraIngredient>> addExtraIngredientToCustomDish(@Path("order") int order,
 	                                                           @Path("customDish") int customDish,
-	                                                           @Path("extraIngredient") int extraIngredient);
+	                                                           @Path("extraIngredient") int extraIngredient,
+	                                                           @Field("quantity") int quantity);
 
 	@FormUrlEncoded
 	@POST("orders")

@@ -2,8 +2,6 @@ package com.tfg.bangbangtan.restaurantapp.Activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModel;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -13,14 +11,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.tfg.bangbangtan.restaurantapp.API_Management.APIManager;
 import com.tfg.bangbangtan.restaurantapp.Models.CustomDish;
 import com.tfg.bangbangtan.restaurantapp.Models.ExtraIngredient;
 import com.tfg.bangbangtan.restaurantapp.Models.Order;
 import com.tfg.bangbangtan.restaurantapp.R;
 import com.tfg.bangbangtan.restaurantapp.ViewModels.OrderViewModel;
 
-import org.w3c.dom.Text;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,36 +40,28 @@ public class OrderActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_order);
 		ButterKnife.bind(this);
-		orderViewModel= ViewModelProviders.of(this).get(OrderViewModel.class);
+		orderViewModel = ViewModelProviders.of(this).get(OrderViewModel.class);
 		order_cost_txt.setText(String.valueOf(Order.getInstance().getCost()));
-		send_order_button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				send_order_button.setVisibility(View.INVISIBLE);
-				createOrder();
-				/*APIManager.getInstance().getOrder(2);*/
-				Toast.makeText(OrderActivity.this, "Creado Order de id"+ Order.getInstance().getId(), Toast.LENGTH_LONG).show();
-			}
-		});
+		send_order_button.setOnClickListener(this::onClickSendOrder);
 	}
-	private void createOrder(){
-		final LiveData<Order> orderLiveData=orderViewModel.createOrder();
-		Observer<Order> orderResponseObserver= new ObserverOrder(orderLiveData);
+
+	private void createOrder() {
+		final LiveData<Order> orderLiveData = orderViewModel.createOrder();
+		Observer<Order> orderResponseObserver = new ObserverOrder(orderLiveData);
 		orderLiveData.removeObservers(this);
-		orderLiveData.observe(OrderActivity.this,orderResponseObserver);
+		orderLiveData.observe(OrderActivity.this, orderResponseObserver);
 	}
-	private void createOrderCustomDishes(){
 
-		for(CustomDish customDish: Order.getInstance().getCustomDishes()){
-			final LiveData<CustomDish> customDishLiveData= orderViewModel.createCustomDish(customDish);
-
-			Observer<CustomDish> customDishResponseObserver= new ObserverCustomDish(customDishLiveData);
+	private void createOrderCustomDishes() {
+		for (CustomDish customDish : Order.getInstance().getCustomDishes()) {
+			final LiveData<CustomDish> customDishLiveData = orderViewModel.createCustomDish(customDish);
+			Observer<CustomDish> customDishResponseObserver = new ObserverCustomDish(customDishLiveData);
 			customDishLiveData.removeObservers(this);
-			customDishLiveData.observe(OrderActivity.this,customDishResponseObserver);
-
+			customDishLiveData.observe(OrderActivity.this, customDishResponseObserver);
 		}
 	}
-	private void updateOrder(Order order){
+
+	private void updateOrder(Order order) {
 		Order.getInstance().setId(order.getId());
 		//prueba
 		textID.setText(String.valueOf(Order.getInstance().getId()));
@@ -80,35 +69,39 @@ public class OrderActivity extends AppCompatActivity {
 		createOrderCustomDishes();
 
 	}
-	private void associateExtraIngredients(CustomDish customDish){
 
+	private void onClickSendOrder(View v) {
+		send_order_button.setVisibility(View.INVISIBLE);
+		createOrder();
+		Toast.makeText(OrderActivity.this, "Creado Order de id: " + Order.getInstance().getId(), Toast.LENGTH_LONG).show();
 	}
 
-	private class ObserverOrder implements Observer<Order>{
+	private class ObserverOrder implements Observer<Order> {
 		private LiveData<Order> orderLiveData;
-		ObserverOrder(LiveData<Order> orderLiveData){
-			this.orderLiveData=orderLiveData;
+
+		ObserverOrder(LiveData<Order> orderLiveData) {
+			this.orderLiveData = orderLiveData;
 		}
 
 		@Override
 		public void onChanged(@Nullable Order order) {
-			if (order!=null){
+			if (order != null) {
 				updateOrder(order);
 				orderLiveData.removeObserver(this);
 			}
 		}
 	}
-	private class ObserverCustomDish implements Observer<CustomDish>{
+
+	private class ObserverCustomDish implements Observer<CustomDish> {
 		private LiveData<CustomDish> customDishLiveData;
 
-		ObserverCustomDish(LiveData<CustomDish> customDishLiveData){
-			this.customDishLiveData=customDishLiveData;
+		ObserverCustomDish(LiveData<CustomDish> customDishLiveData) {
+			this.customDishLiveData = customDishLiveData;
 		}
 
 		@Override
 		public void onChanged(@Nullable CustomDish customDish) {
-			if (customDish!=null){
-				associateExtraIngredients(customDish);
+			if (customDish != null) {
 				customDishLiveData.removeObserver(this);
 			}
 		}

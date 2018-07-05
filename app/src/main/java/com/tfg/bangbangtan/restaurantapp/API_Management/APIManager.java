@@ -173,7 +173,8 @@ public class APIManager {
 
 	public void createCustomDish(final CustomDish customDish, final ResponseCallback<CustomDish> responseCallback) {
 		if (Order.getInstance().getId() != 0) {
-			Call<CustomDish> customDishCall = restaurantService.createCustomDish(Order.getInstance().getId(), customDish.getComment(), customDish.getCost(), customDish.getDishId());
+
+			Call<CustomDish> customDishCall = restaurantService.createCustomDish(customDish.getOrderId(), customDish.getComment().isEmpty() ? null : customDish.getComment(), customDish.getCost(), customDish.getDishId());
 
 			customDishCall.enqueue(new Callback<CustomDish>() {
 				@Override

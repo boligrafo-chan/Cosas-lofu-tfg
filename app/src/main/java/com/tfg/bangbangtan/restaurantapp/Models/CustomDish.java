@@ -15,13 +15,16 @@ public class CustomDish {
 	private double cost;
 	private String comment;
 
+	private Dish dish;
+
 
 	private List<ExtraIngredient> selectedExtraIngredients;
 
-	public CustomDish( int dishId, double cost, String comment) {
-
+	public CustomDish(Dish dish, double cost, String comment)
+	{
 		this.selectedExtraIngredients= new ArrayList<>();
-		this.dishId = dishId;
+		this.dish = dish;
+		this.dishId = dish.getId();
 		this.cost = cost;
 		this.comment = comment;
 	}
@@ -73,4 +76,11 @@ public class CustomDish {
 	}
 
 
+	public Dish getDish() {
+		return dish;
+	}
+
+	public void setDish(Dish dish) {
+		this.dish = dish;
+	}
 }

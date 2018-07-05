@@ -130,11 +130,9 @@ public class DishDetailActivity extends AppCompatActivity {
 
 	private void onClickAddToOrder(View v) {
 		if (dish != null) {
-			CustomDish customDish = new CustomDish(dish.getId(), totalPrice, comment_input.getText().toString());
+			CustomDish customDish = new CustomDish(dish, totalPrice, comment_input.getText().toString());
 			customDish.setSelectedExtraIngredients(extraIngredients);
 			Order.getInstance().addCustomDish(customDish);
-			double currentCost = Order.getInstance().getCost() + customDish.getCost();
-			Order.getInstance().setCost(currentCost);
 
 			Toast.makeText(DishDetailActivity.this, "Se ha añadido el plato", Toast.LENGTH_LONG).show();
 			Intent backToMenu;

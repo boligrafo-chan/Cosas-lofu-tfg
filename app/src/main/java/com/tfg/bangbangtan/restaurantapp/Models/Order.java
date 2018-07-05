@@ -37,17 +37,15 @@ public class Order {
 
 	public void addCustomDish(CustomDish customDish) {
 		this.customDishes.add(customDish);
+		cost += customDish.getCost();
 	}
 	public void removeCustomDish(int position){
+		cost -= customDishes.get(position).getCost();
 		this.customDishes.remove(position);
 	}
 
 	public double getCost() {
 		return cost;
-	}
-
-	public void setCost(double cost) {
-		this.cost = cost;
 	}
 
 	public int getId() {

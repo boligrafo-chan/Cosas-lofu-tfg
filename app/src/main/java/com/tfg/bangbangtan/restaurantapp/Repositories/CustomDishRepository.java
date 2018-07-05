@@ -25,7 +25,6 @@ public class CustomDishRepository {
 
 			@Override
 			public void OnResponseFailure() {
-
 			}
 		});
 		return responseLiveData;

@@ -40,7 +40,8 @@ public class Order {
 		cost += customDish.getCost();
 	}
 	public void removeCustomDish(int position){
-		cost -= customDishes.get(position).getCost();
+		double remaining=cost - customDishes.get(position).getCost();
+		cost = remaining;
 		this.customDishes.remove(position);
 	}
 

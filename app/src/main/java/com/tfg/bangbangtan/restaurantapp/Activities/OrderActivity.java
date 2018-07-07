@@ -27,7 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class OrderActivity extends AppCompatActivity {
+public class OrderActivity extends AppCompatActivity implements View.OnClickListener {
 
 	OrderViewModel orderViewModel;
 
@@ -51,7 +51,7 @@ public class OrderActivity extends AppCompatActivity {
 		order_cost_txt.setText(String.valueOf(Order.getInstance().getCost()));
 		send_order_button.setOnClickListener(this::onClickSendOrder);
 
-		CustomDishAdapter adapter = new CustomDishAdapter(Order.getInstance().getCustomDishes());
+		CustomDishAdapter adapter = new CustomDishAdapter(Order.getInstance().getCustomDishes(),this);
 		listCustomDish.setAdapter(adapter);
 
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -111,6 +111,11 @@ public class OrderActivity extends AppCompatActivity {
 		}
 	}
 
+	@Override
+	public void onClick(View v) {
+		order_cost_txt.setText(String.valueOf(Order.getInstance().getCost()));
+	}
+
 	private class ObserverOrder implements Observer<Order> {
 		private LiveData<Order> orderLiveData;
 
@@ -121,8 +126,8 @@ public class OrderActivity extends AppCompatActivity {
 		@Override
 		public void onChanged(@Nullable Order order) {
 			if (order != null) {
-				updateOrder(order);
-				orderLiveData.removeObserver(this);
+					updateOrder(order);
+					orderLiveData.removeObserver(this);
 			}
 		}
 	}
@@ -145,4 +150,5 @@ public class OrderActivity extends AppCompatActivity {
 			}
 		}
 	}
+
 }

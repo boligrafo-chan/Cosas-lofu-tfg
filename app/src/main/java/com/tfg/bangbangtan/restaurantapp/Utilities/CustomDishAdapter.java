@@ -24,9 +24,11 @@ import butterknife.ButterKnife;
 public class CustomDishAdapter extends RecyclerView.Adapter<CustomDishAdapter.ViewHolder> {
 
 	private List<CustomDish> customDishes;
+	private View.OnClickListener listener;
 
-	public CustomDishAdapter(List<CustomDish> customDishes) {
+	public CustomDishAdapter(List<CustomDish> customDishes, View.OnClickListener listener) {
 		this.customDishes = customDishes;
+		this.listener=listener;
 	}
 
 	@NonNull
@@ -38,7 +40,7 @@ public class CustomDishAdapter extends RecyclerView.Adapter<CustomDishAdapter.Vi
 
 	@Override
 	public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-		holder.bind(customDishes.get(position));
+		holder.bind(customDishes.get(position), listener);
 	}
 
 	@Override
@@ -64,7 +66,7 @@ public class CustomDishAdapter extends RecyclerView.Adapter<CustomDishAdapter.Vi
 			this.listExtraIngredients.setLayoutManager(linearLayoutManager);
 		}
 
-		public void bind(CustomDish customDish){
+		public void bind(CustomDish customDish, final View.OnClickListener listener){
 			name.setText(customDish.getDish().getName());
 			price.setText(String.format("%.2f€", customDish.getCost()));
 			ExtraIngredientPriceAdapter adapter = new ExtraIngredientPriceAdapter(customDish.getSelectedExtraIngredients());
@@ -73,11 +75,16 @@ public class CustomDishAdapter extends RecyclerView.Adapter<CustomDishAdapter.Vi
 			deleteButton.setOnClickListener(v -> {
 				new AlertDialog.Builder(this.itemView.getContext())
 						.setIcon(android.R.drawable.ic_delete)
-						.setTitle("Remover plato")
-						.setMessage("¿Esta seguro de que desea remover este plato?")
-						.setPositiveButton("Si", (dialog, which) -> {
-							Order.getInstance().removeCustomDish(getAdapterPosition());
-							notifyDataSetChanged();
+						.setTitle("Quitar plato")
+						.setMessage("¿Esta seguro de que desea quitar este plato?")
+						.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+							@Override
+							public void onClick(DialogInterface dialog, int which) {
+
+								Order.getInstance().removeCustomDish(getAdapterPosition());
+								listener.onClick(null);
+								notifyDataSetChanged();
+							}
 						})
 						.setNegativeButton("No", null)
 						.show();

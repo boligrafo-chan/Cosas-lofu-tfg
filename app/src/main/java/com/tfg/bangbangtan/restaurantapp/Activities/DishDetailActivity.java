@@ -73,7 +73,12 @@ public class DishDetailActivity extends AppCompatActivity {
 		dishDetailViewModel = ViewModelProviders.of(this).get(DishDetailViewModel.class);
 		extraIngredients = new ArrayList<>();
 
-		extraIngredientAdapter = new ExtraIngredientAdapter(extraIngredients, this::onSelectExtraIngredientQuantity);
+		extraIngredientAdapter = new ExtraIngredientAdapter(extraIngredients, new ExtraIngredientAdapter.OnSelectQuantityListener() {
+			@Override
+			public void onSelectQuantity(int position) {
+				DishDetailActivity.this.onSelectExtraIngredientQuantity(position);
+			}
+		});
 		extra_ing_list_view.setAdapter(extraIngredientAdapter);
 		LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
 		linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
